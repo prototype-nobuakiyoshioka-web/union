@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UNION RECRUIT SITE MAP</title>
+  <style>
+    :root {
+      --ink: #262626;
+      --muted: #757575;
+      --line: #9a9a9a;
+      --node: #4a4a4a;
+      --node-sub: #777;
+      --node-detail: #f4f4f2;
+      --border: #dededb;
+      --paper: #fff;
+      --accent: #1b8f64;
+      --pending: #a96c20;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #ececea;
+    }
+
+    body {
+      min-width: 1180px;
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: min(100%, 1600px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 58px 72px 42px;
+      background:
+        linear-gradient(90deg, #f8f8f6 0, #f8f8f6 1px, transparent 1px) 0 0 / 100% 100%,
+        var(--paper);
+    }
+
+    .page-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 64px;
+      max-width: 1240px;
+      margin: 0 auto 38px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e5e5e2;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #8c8c88;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .28em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 500;
+      letter-spacing: .17em;
+      line-height: 1.2;
+    }
+
+    .header-copy {
+      width: 460px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .sitemap {
+      position: relative;
+      width: 1160px;
+      height: 612px;
+      margin: 0 auto;
+    }
+
+    .site-name {
+      position: absolute;
+      left: 0;
+      top: 34px;
+    }
+
+    .site-name strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .22em;
+    }
+
+    .site-name span {
+      display: block;
+      margin-top: 7px;
+      color: #aaa;
+      font-size: 10px;
+      letter-spacing: .34em;
+    }
+
+    .connector {
+      position: absolute;
+      z-index: 0;
+      background: var(--line);
+    }
+
+    .connector.horizontal {
+      height: 1px;
+    }
+
+    .connector.vertical {
+      width: 1px;
+    }
+
+    .line-root {
+      left: 280px;
+      top: 274px;
+      width: 110px;
+    }
+
+    .line-trunk {
+      left: 390px;
+      top: 103px;
+      height: 342px;
+    }
+
+    .line-main {
+      left: 390px;
+      width: 70px;
+    }
+
+    .line-company { top: 103px; }
+    .line-department { top: 217px; }
+    .line-people { top: 331px; }
+    .line-news { top: 445px; }
+
+    .branch-line {
+      left: 748px;
+      width: 62px;
+    }
+
+    .branch-department { top: 217px; }
+    .branch-people { top: 331px; }
+    .branch-news { top: 445px; }
+
+    .node {
+      position: absolute;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 88px;
+      padding: 17px 34px;
+      color: #fff;
+      background: var(--node);
+      clip-path: polygon(7% 0, 100% 0, 100% 72%, 93% 100%, 0 100%, 0 28%);
+    }
+
+    .node-kicker {
+      margin: 0 0 7px;
+      color: rgba(255, 255, 255, .62);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+    }
+
+    .node-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: .13em;
+      line-height: 1.35;
+    }
+
+    .node-description {
+      margin: 7px 0 0;
+      color: rgba(255, 255, 255, .74);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .node-root {
+      left: 10px;
+      top: 222px;
+      width: 270px;
+      min-height: 104px;
+      padding-left: 42px;
+      background: #353535;
+    }
+
+    .node-root .node-title {
+      font-size: 22px;
+      letter-spacing: .24em;
+    }
+
+    .node-main {
+      left: 460px;
+      width: 288px;
+    }
+
+    .node-company {
+      top: 45px;
+      height: 116px;
+    }
+    .node-department { top: 173px; }
+    .node-people { top: 287px; }
+    .node-news { top: 401px; }
+
+    .node-detail {
+      left: 810px;
+      width: 330px;
+      min-height: 74px;
+      padding: 14px 28px;
+      color: #383838;
+      background: var(--node-detail);
+      border: 1px solid var(--border);
+      clip-path: polygon(6% 0, 100% 0, 100% 72%, 94% 100%, 0 100%, 0 28%);
+    }
+
+    .node-detail .node-kicker {
+      color: #969691;
+    }
+
+    .node-detail .node-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .08em;
+    }
+
+    .department-details {
+      position: absolute;
+      left: 810px;
+      top: 172px;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 330px;
+    }
+
+    .department-details .detail-chip {
+      display: flex;
+      align-items: center;
+      min-height: 41px;
+      padding: 0 17px;
+      color: #4b4b4b;
+      background: var(--node-detail);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+    }
+
+    .detail-people { top: 294px; }
+    .detail-news { top: 408px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      vertical-align: middle;
+    }
+
+    .badge-cms {
+      color: #146b4e;
+      background: #ddf3e9;
+    }
+
+    .badge-pending {
+      color: #815116;
+      background: #f5e8d7;
+    }
+
+    .common-area {
+      position: absolute;
+      left: 10px;
+      top: 530px;
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      width: 1130px;
+      min-height: 68px;
+      padding: 13px 22px;
+      background: #fafaf8;
+      border: 1px solid #deded9;
+    }
+
+    .common-label {
+      color: #8b8b86;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .common-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: .08em;
+    }
+
+    .common-copy {
+      margin: 5px 0 0;
+      color: #777;
+      font-size: 11px;
+    }
+
+    .primary-cv {
+      padding: 9px 15px;
+      color: #fff;
+      background: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+    }
+
+    .notes {
+      display: grid;
+      grid-template-columns: 160px 1fr 1fr 1fr;
+      gap: 24px;
+      max-width: 1160px;
+      margin: 28px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid #e5e5e2;
+    }
+
+    .notes-heading {
+      margin: 0;
+      color: #8b8b86;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .25em;
+    }
+
+    .note {
+      margin: 0;
+      color: #777;
+      font-size: 11px;
+      line-height: 1.75;
+    }
+
+    .note strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #444;
+      font-size: 11px;
+      letter-spacing: .05em;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">UNION RECRUITMENT</p>
+        <h1>SITE MAP</h1>
+      </div>
+      <p class="header-copy">
+        採用サイトのページ構成と更新範囲を示したサイトマップです。
+        主要ページ、下層ページ、共通の問い合わせ導線を分類しています。
+      </p>
+    </header>
+
+    <section class="sitemap" aria-label="UNION採用サイトのサイトマップ">
+      <div class="site-name" aria-hidden="true">
+        <strong>UNION</strong>
+        <span>RECRUIT SITE</span>
+      </div>
+
+      <div class="connector horizontal line-root"></div>
+      <div class="connector vertical line-trunk"></div>
+      <div class="connector horizontal line-main line-company"></div>
+      <div class="connector horizontal line-main line-department"></div>
+      <div class="connector horizontal line-main line-people"></div>
+      <div class="connector horizontal line-main line-news"></div>
+      <div class="connector horizontal branch-line branch-department"></div>
+      <div class="connector horizontal branch-line branch-people"></div>
+      <div class="connector horizontal branch-line branch-news"></div>
+
+      <article class="node node-root">
+        <p class="node-kicker">Starting point</p>
+        <h2 class="node-title">TOP</h2>
+        <p class="node-description">動画KV・会社の想い・従業員の声</p>
+      </article>
+
+      <article class="node node-main node-company">
+        <p class="node-kicker">About us</p>
+        <h2 class="node-title">会社について</h2>
+        <p class="node-description">
+          会社説明・想い・仕事内容・給与／キャリア
+          <span class="badge badge-pending">確認待ち</span>
+        </p>
+      </article>
+
+      <article class="node node-main node-department">
+        <p class="node-kicker">Department</p>
+        <h2 class="node-title">部署紹介</h2>
+        <p class="node-description">各部署の紹介動画・仕事内容</p>
+      </article>
+
+      <div class="department-details" aria-label="部署紹介の下層ページ">
+        <div class="detail-chip">バイヤー</div>
+        <div class="detail-chip">店舗管理部</div>
+        <div class="detail-chip">広報部</div>
+        <div class="detail-chip">人事部</div>
+      </div>
+
+      <article class="node node-main node-people">
+        <p class="node-kicker">People</p>
+        <h2 class="node-title">人（PEOPLE）</h2>
+        <p class="node-description">
+          従業員インタビュー
+          <span class="badge badge-cms">CMS</span>
+        </p>
+      </article>
+
+      <article class="node node-detail detail-people">
+        <p class="node-kicker">Detail page</p>
+        <h3 class="node-title">インタビュー詳細</h3>
+      </article>
+
+      <article class="node node-main node-news">
+        <p class="node-kicker">News</p>
+        <h2 class="node-title">お知らせ <span class="badge badge-cms">CMS</span></h2>
+        <p class="node-description">採用情報・イベント情報など</p>
+      </article>
+
+      <article class="node node-detail detail-news">
+        <p class="node-kicker">Detail page</p>
+        <h3 class="node-title">記事詳細</h3>
+      </article>
+
+      <aside class="common-area" aria-label="全ページ共通機能">
+        <div class="common-label">Common function</div>
+        <div>
+          <p class="common-title">LINE 問い合わせ</p>
+          <p class="common-copy">説明会参加・採用に関する問い合わせへ誘導する全ページ共通ボタン</p>
+        </div>
+        <div class="primary-cv">PRIMARY CV</div>
+      </aside>
+    </section>
+
+    <footer class="notes" aria-label="サイトマップの注記">
+      <p class="notes-heading">NOTES</p>
+      <p class="note">
+        <strong>CMS</strong>
+        クライアントが管理画面から記事の追加・編集を行うページです。
+      </p>
+      <p class="note">
+        <strong>確認待ち</strong>
+        仕事内容・給与・キャリア情報の配置はクライアント確認後に確定します。
+      </p>
+      <p class="note">
+        <strong>ページ方針</strong>
+        募集要項ページは設けず、LINE問い合わせを主な応募導線として使用します。
+      </p>
+    </footer>
+  </main>
+</body>
+</html>
