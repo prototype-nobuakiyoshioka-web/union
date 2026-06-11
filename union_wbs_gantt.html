@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNION採用サイト｜WBS・ガントチャート</title>
+<style>
+:root {
+  --bg: #ECECEA;
+  --surface: #FFFFFF;
+  --border: #DEDEDB;
+  --text: #262626;
+  --muted: #757575;
+  --ph0: #353535; --ph0-l: #F1F1EE;
+  --ph1: #4A4A4A; --ph1-l: #F1F1EE;
+  --ph2: #777; --ph2-l: #F4F4F2;
+  --ph3: #969691; --ph3-l: #F8F8F6;
+  --ph4: #1B8F64; --ph4-l: #EDF7F3;
+  --radius: 0;
+  --shadow: none;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body {
+  min-width: 960px;
+  padding-left: 150px;
+  font-family: "Helvetica Neue",'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif;
+  background: var(--bg); color: var(--text);
+  font-size: 13px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.header {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 58px 72px 24px;
+  color: var(--text);
+  background: var(--surface);
+  border-bottom: 1px solid #E5E5E2;
+}
+.header-inner { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 48px; }
+.header-eyebrow { margin-bottom: 12px; color: #8C8C88; font-size: 11px; font-weight: 600; letter-spacing: .28em; }
+.header-title { font-size: 28px; font-weight: 500; letter-spacing: .1em; line-height: 1.35; }
+.header-sub { font-size: 12px; color: var(--muted); margin-top: 10px; letter-spacing: .04em; }
+.header-meta { max-width: 400px; text-align: right; }
+.hbadge { display: inline-block; background: #FAFAF8; border: 1px solid var(--border); border-radius: 0; padding: 4px 10px; font-size: 11px; color: #686864; margin: 2px 3px 0 0; letter-spacing: .03em; }
+.site-nav {
+  position: fixed; z-index: 100; top: 20px; left: 14px;
+  display: flex; flex-direction: column; gap: 6px; width: 122px;
+}
+.site-nav a {
+  display: inline-flex; align-items: center; min-height: 34px; padding: 6px 14px;
+  color: #686864; background: #fff; border: 1px solid #DEDED9;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  font-size: 11px; font-weight: 600; letter-spacing: .06em; text-decoration: none;
+  transition: color .2s ease, background .2s ease, border-color .2s ease;
+}
+.site-nav a:hover { color: #262626; background: #F1F1EE; border-color: #BDBDB8; }
+.site-nav a[aria-current="page"] { color: #fff; background: #4A4A4A; border-color: #4A4A4A; }
+
+/* ── LAYOUT ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 38px 72px 64px; background: var(--surface); }
+.sec { margin-bottom: 26px; }
+.sec-title {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .18em;
+  color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.sec-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── STATS ── */
+.stats-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.stat-card {
+  flex: 1; min-width: 110px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; box-shadow: var(--shadow);
+}
+.stat-label { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+.stat-value { font-size: 20px; font-weight: 700; }
+
+/* ── LEGEND ── */
+.legend-wrap {
+  display: flex; gap: 20px; flex-wrap: wrap; align-items: center;
+  padding: 12px 16px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.legend-grp { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.legend-lbl { font-size: 11px; font-weight: 700; color: #374151; }
+.li { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); }
+.ldot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.ldot-stripe { background-image: repeating-linear-gradient(45deg,#94A3B8 0,#94A3B8 2px,#E2E8F0 2px,#E2E8F0 6px); }
+.ldot-wait { background:#F5E8D7; border:1.5px dashed #B99464; }
+.ldot-ext  { background:#FAFAF8; border:1.5px dashed #B99464; }
+.ldiv { width: 1px; height: 18px; background: var(--border); }
+
+/* ── EXTERNAL DEPS ── */
+.ext-box { background:#FAFAF8; border:1px solid var(--border); border-radius:var(--radius); padding:12px 16px; margin-bottom:14px; }
+.ext-title { font-size:12px; font-weight:700; color:#685030; margin-bottom:8px; }
+.ext-item { font-size:12px; display:flex; gap:8px; padding:5px 0; border-bottom:1px dashed #D6C8B5; }
+.ext-item:last-child { border-bottom:none; }
+
+/* ── WBS ── */
+.wbs-block { margin-bottom: 10px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.wbs-head {
+  display: flex; align-items: center; gap: 8px; padding: 9px 14px;
+  font-weight: 700; font-size: 13px; color: #fff; cursor: pointer; user-select: none;
+}
+.wbs-head .ph-badge { font-size: 10px; background: rgba(255,255,255,.25); border-radius: 4px; padding: 1px 6px; }
+.wbs-head .cnt { font-size: 11px; opacity: .7; }
+.wbs-head .arr { margin-left: auto; font-size: 13px; transition: transform .2s; }
+.wbs-head.closed .arr { transform: rotate(-90deg); }
+.wbs-body { background: var(--surface); }
+.wbs-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px 7px 28px;
+  border-top: 1px solid #F3F4F6; font-size: 12px;
+}
+.wbs-row:first-child { border-top: none; }
+.wbs-icon { font-size: 11px; flex-shrink: 0; }
+.wbs-name { flex: 1; }
+.wbs-resp {
+  font-size: 10px; font-weight: 600; border-radius: 4px;
+  padding: 2px 6px; white-space: nowrap;
+}
+.r-self  { background:#E8E8E4; color:#444; }
+.r-other { background:#F3F4F6; color:#374151; }
+.r-ext   { background:#F5E8D7; color:#815116; }
+.r-mile  { background:#EDF7F3; color:#176E50; }
+
+/* ── GANTT ── */
+.gantt-outer { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.gt { border-collapse: collapse; table-layout: fixed; }
+
+/* Sticky */
+.gn { position: sticky; left: 0; z-index: 4; background: var(--surface); width: 190px; min-width: 190px; }
+.gr { position: sticky; left: 190px; z-index: 4; background: var(--surface); width: 82px; min-width: 82px; }
+
+/* Header rows */
+.row-month th {
+  padding: 5px 0; text-align: center; font-size: 11px; font-weight: 700;
+  background: #F1F5F9; color: var(--muted);
+  border-bottom: 1px solid var(--border); border-right: 1px solid var(--border);
+}
+.row-week th {
+  padding: 3px 0; text-align: center; font-size: 10px; font-weight: 500; color: #9CA3AF;
+  background: #F9FAFB; border-bottom: 2px solid var(--border);
+  border-right: 1px solid #F3F4F6; width: 34px; min-width: 34px;
+}
+.row-week th.cur { background: #EEEEEB; color: var(--ph1); font-weight: 700; }
+.row-month .gn, .row-month .gr,
+.row-week .gn, .row-week .gr {
+  background: #F1F5F9; border-right: 1px solid var(--border);
+  font-size: 11px; font-weight: 700; padding: 0 8px; color: var(--muted);
+}
+.row-week .gr { border-right: 2px solid var(--border); }
+
+/* Phase header rows */
+.row-ph td {
+  padding: 4px 10px; font-size: 11px; font-weight: 700; color: #fff;
+}
+.row-ph .gn { border-right: 1px solid rgba(255,255,255,.2); }
+.row-ph .gr { border-right: 2px solid rgba(255,255,255,.2); }
+
+/* Task rows */
+.row-task td { border-bottom: 1px solid #F3F4F6; height: 28px; vertical-align: middle; }
+.row-task:hover td { background: #FAFBFC; }
+.row-task:hover .gn, .row-task:hover .gr { background: #FAFBFC; }
+.gn-cell { font-size: 11px; padding: 0 6px 0 10px; border-right: 1px solid var(--border); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gr-cell { font-size: 10px; padding: 0 5px; border-right: 2px solid var(--border); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Week cells */
+.gc {
+  width: 34px; min-width: 34px; padding: 3px 1px;
+  border-right: 1px solid #F9FAFB; vertical-align: middle;
+}
+.gc.cur  { background: #F3F3F0; }
+.gc.mend { border-right: 2px solid var(--border) !important; }
+
+/* Bars */
+.bar {
+  height: 16px; border-radius: 0;
+}
+.bs { border-radius: 4px 0 0 4px; }
+.be { border-radius: 0 4px 4px 0; }
+.bo { border-radius: 4px; }
+.bar-self { /* color via inline */ }
+.bar-other {
+  background-image: repeating-linear-gradient(
+    45deg, rgba(255,255,255,.38) 0px, rgba(255,255,255,.38) 3px,
+    transparent 3px, transparent 8px
+  );
+}
+.bar-wait {
+  background: #F5E8D7 !important;
+  border-top: 1.5px dashed #B99464;
+  border-bottom: 1.5px dashed #B99464;
+}
+.bar-wait.bs  { border-left: 1.5px dashed #B99464; }
+.bar-wait.be  { border-right: 1.5px dashed #B99464; }
+.bar-wait.bo  { border: 1.5px dashed #B99464; }
+.bar-ext {
+  background: #FAFAF8 !important;
+  border-top: 1.5px dashed #B99464;
+  border-bottom: 1.5px dashed #B99464;
+}
+.bar-ext.bs  { border-left: 1.5px dashed #B99464; }
+.bar-ext.be  { border-right: 1.5px dashed #B99464; }
+.bar-ext.bo  { border: 1.5px dashed #B99464; }
+.mile-cell { height: 16px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+
+/* Footer */
+.gantt-note { font-size: 11px; color: var(--muted); margin-top: 8px; padding: 0 2px; }
+footer { max-width: 1280px; margin: 0 auto; text-align: center; font-size: 11px; color: var(--muted); padding: 24px 72px 36px; border-top: 1px solid #E5E5E2; background: var(--surface); letter-spacing: .03em; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-eyebrow">UNION RECRUITMENT</div>
+      <div class="header-title">WBS / GANTT CHART</div>
+      <div class="header-sub">株式会社野嵩商会（フレッシュプラザUNION）新規採用サイト構築</div>
+    </div>
+    <div class="header-meta">
+      <span class="hbadge">2026年6月 作成</span>
+      <span class="hbadge">全5フェーズ</span>
+      <span class="hbadge" id="hbadge-total">全 — タスク</span>
+    </div>
+  </div>
+  <nav class="site-nav" aria-label="資料ページ">
+    <a href="index.html">スケジュール</a>
+    <a href="union_recruit_sitemap.html">サイトマップ</a>
+    <a href="union_wbs_gantt.html" aria-current="page">WBS・ガント</a>
+  </nav>
+</div>
+
+<div class="container">
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <!-- LEGEND -->
+  <div class="sec">
+    <div class="sec-title">凡例</div>
+    <div class="legend-wrap">
+      <div class="legend-grp">
+        <span class="legend-lbl">フェーズ</span>
+        <div class="li"><div class="ldot" style="background:#353535"></div>Ph.0 始動</div>
+        <div class="li"><div class="ldot" style="background:#4A4A4A"></div>Ph.1 要件定義</div>
+        <div class="li"><div class="ldot" style="background:#777"></div>Ph.2 デザイン</div>
+        <div class="li"><div class="ldot" style="background:#969691"></div>Ph.3 実装</div>
+        <div class="li"><div class="ldot" style="background:#1B8F64"></div>Ph.4 公開</div>
+      </div>
+      <div class="ldiv"></div>
+      <div class="legend-grp">
+        <span class="legend-lbl">種別</span>
+        <div class="li"><div class="ldot" style="background:#4A4A4A"></div>自分（実線）</div>
+        <div class="li"><div class="ldot ldot-stripe"></div>他者担当（斜線）</div>
+        <div class="li"><div class="ldot ldot-wait"></div>外部待ち</div>
+        <div class="li"><div class="ldot ldot-ext"></div>素材依存</div>
+        <div class="li" style="font-size:13px;color:#1B8F64;gap:2px;">◆<span style="font-size:11px;color:var(--muted);">マイルストーン</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXTERNAL DEPS -->
+  <div class="ext-box">
+    <div class="ext-title">⚠️ 外部依存条件（スケジュールに直結）</div>
+    <div class="ext-item"><span>🔴</span><span><strong>素材（写真・動画）撮影・支給</strong>　撮影班（自社）→ Google Drive。撮影日程<strong>未確定</strong>。Ph.2デザイン＆Ph.3実装のボトルネック。</span></div>
+    <div class="ext-item"><span>🟡</span><span><strong>保留③〜⑥ クライアント回答</strong>　ミヤハラ様（上長経由）。回答遅延 → Ph.1完了・Ph.2着手が後ろ倒し。</span></div>
+    <div class="ext-item"><span>🟡</span><span><strong>Interactive社 オリジナルパーツ納品</strong>　カンプベース完成後に依頼。レビュー往復含め最低2週間を見込む。</span></div>
+  </div>
+
+  <!-- WBS -->
+  <div class="sec">
+    <div class="sec-title">📋 WBS（作業分解構造）</div>
+    <div id="wbs"></div>
+  </div>
+
+  <!-- GANTT -->
+  <div class="sec">
+    <div class="sec-title">📅 ガントチャート（週次 / 2026年6月〜10月）</div>
+    <div class="gantt-outer">
+      <table class="gt" id="gt"></table>
+    </div>
+    <div class="gantt-note">◆ 現在地：2026年6月第2週（6月W2）　▏週次スケジュール。素材撮影日程確定後、8〜9月を更新予定。</div>
+  </div>
+
+</div>
+
+<footer>UNION採用サイト WBS・ガントチャート ／ スコープ：サイト設計・実装・公開 ／ 対話確認済み：2026年6月11日</footer>
+
+<script>
+/* ===== DATA ===== */
+const PH = [
+  { id:0, lbl:'Ph.0', name:'プロジェクト始動',        color:'#353535', light:'#F1F1EE' },
+  { id:1, lbl:'Ph.1', name:'要件定義・擦り合わせ',    color:'#4A4A4A', light:'#F1F1EE' },
+  { id:2, lbl:'Ph.2', name:'デザイン確定',             color:'#777',    light:'#F4F4F2' },
+  { id:3, lbl:'Ph.3', name:'実装',                     color:'#969691', light:'#F8F8F6' },
+  { id:4, lbl:'Ph.4', name:'テスト・公開・保守',       color:'#1B8F64', light:'#EDF7F3' },
+];
+
+// type: self | other | wait | external | milestone
+const TASKS = [
+  // Ph.0
+  { p:0, name:'キックオフMTG 設定',            resp:'弊社代表',              type:'other',     s:2,  e:2  },
+  { p:0, name:'キックオフMTG 参加',            resp:'全員',                  type:'milestone', s:2,  e:2  },
+  { p:0, name:'要件確認リスト 作成・送付',     resp:'自分 → 上長',           type:'self',      s:2,  e:3  },
+  // Ph.1
+  { p:1, name:'保留③〜⑥ 回答待ち',           resp:'ミヤハラ様',            type:'wait',      s:3,  e:6  },
+  { p:1, name:'Figmaワイヤー骨格 作成',        resp:'自分',                  type:'self',      s:3,  e:6  },
+  { p:1, name:'WordPress 環境追加整備',        resp:'自分',                  type:'self',      s:3,  e:4  },
+  { p:1, name:'ACFフィールド設計 仮置き',      resp:'自分',                  type:'self',      s:4,  e:6  },
+  { p:1, name:'要件定義書 作成',               resp:'自分',                  type:'self',      s:5,  e:7  },
+  { p:1, name:'Interactive社MTG 設定',         resp:'上長',                  type:'other',     s:6,  e:6  },
+  { p:1, name:'Interactive社 MTG',             resp:'自分・上長・Interactive社', type:'milestone', s:7, e:7 },
+  { p:1, name:'要件 最終確定',                 resp:'自分',                  type:'self',      s:7,  e:8  },
+  // Ph.2
+  { p:2, name:'カンプ ベース作成',             resp:'自分',                  type:'self',      s:9,  e:10 },
+  { p:2, name:'Interactive社 レビュー',        resp:'Interactive社',         type:'other',     s:10, e:11 },
+  { p:2, name:'オリジナルパーツ 制作・納品',   resp:'Interactive社',         type:'other',     s:10, e:11 },
+  { p:2, name:'カンプ 修正対応',               resp:'自分',                  type:'self',      s:11, e:11 },
+  { p:2, name:'素材 撮影',                     resp:'撮影班（自社）',        type:'external',  s:9,  e:11 },
+  { p:2, name:'素材 Google Drive 共有',        resp:'撮影班 → 自分',         type:'external',  s:11, e:11 },
+  { p:2, name:'素材 デザイン差し込み',         resp:'自分',                  type:'self',      s:11, e:12 },
+  { p:2, name:'クライアント承認 申請',         resp:'上長（メール）',        type:'other',     s:12, e:12 },
+  { p:2, name:'クライアント 承認 ★',          resp:'ミヤハラ様',            type:'milestone', s:12, e:12 },
+  // Ph.3
+  { p:3, name:'TOPページ 実装（優先）',        resp:'自分',                  type:'self',      s:12, e:13 },
+  { p:3, name:'TOP 中間確認 ★',               resp:'ミヤハラ様',            type:'milestone', s:13, e:13 },
+  { p:3, name:'テキストライティング（全ページ）', resp:'自分',              type:'self',      s:12, e:14 },
+  { p:3, name:'ACFフィールド 実装',            resp:'自分',                  type:'self',      s:12, e:13 },
+  { p:3, name:'全ページ実装（SP・PC両対応）',  resp:'自分',                  type:'self',      s:13, e:15 },
+  { p:3, name:'WordPress 入稿',                resp:'自分',                  type:'self',      s:14, e:15 },
+  { p:3, name:'動画埋め込み（動画到着待ち）',  resp:'自分',                  type:'external',  s:14, e:15 },
+  { p:3, name:'LINE連携 実装',                 resp:'自分',                  type:'self',      s:14, e:14 },
+  { p:3, name:'ブラウザ・デバイス テスト',     resp:'自分',                  type:'self',      s:15, e:16 },
+  // Ph.4
+  { p:4, name:'ステージング環境 構築',         resp:'自分',                  type:'self',      s:16, e:16 },
+  { p:4, name:'クライアント UAT（全ページ）',  resp:'ミヤハラ様',            type:'other',     s:17, e:17 },
+  { p:4, name:'修正対応（1〜2回）',            resp:'自分',                  type:'self',      s:17, e:18 },
+  { p:4, name:'ドメイン 取得・設定',           resp:'自分',                  type:'self',      s:18, e:18 },
+  { p:4, name:'本番デプロイ（WP Migration）',  resp:'自分',                  type:'self',      s:18, e:18 },
+  { p:4, name:'DNS・SSL 設定',                 resp:'自分',                  type:'self',      s:18, e:18 },
+  { p:4, name:'本番確認・最終テスト',          resp:'自分',                  type:'self',      s:18, e:19 },
+  { p:4, name:'公開 GOサイン ★',              resp:'ミヤハラ様',            type:'milestone', s:19, e:19 },
+  { p:4, name:'本番公開',                      resp:'自分',                  type:'self',      s:19, e:19 },
+  { p:4, name:'保守・運用 開始',               resp:'自分',                  type:'self',      s:20, e:20 },
+];
+
+const CUR  = 2;   // 6月W2 = 現在地
+const WMAX = 20;
+// Month ends at weeks: 4,8,12,16,20
+const MEND = new Set([4,8,12,16,20]);
+const MONTHS = ['6月','7月','8月','9月','10月'];
+
+/* ===== STATS ===== */
+(function(){
+  const total = TASKS.length;
+  document.getElementById('hbadge-total').textContent = `全${total}タスク`;
+  const phCounts = PH.map(ph => ({ ...ph, cnt: TASKS.filter(t=>t.p===ph.id).length }));
+  const extCnt = TASKS.filter(t=>t.type==='wait'||t.type==='external').length;
+  const row = document.getElementById('stats-row');
+  let h = `<div class="stat-card"><div class="stat-label">総タスク数</div><div class="stat-value">${total}</div></div>`;
+  phCounts.forEach(ph => {
+    h += `<div class="stat-card" style="border-left:4px solid ${ph.color}">
+      <div class="stat-label">${ph.lbl} ${ph.name}</div>
+      <div class="stat-value" style="color:${ph.color}">${ph.cnt}</div>
+    </div>`;
+  });
+  h += `<div class="stat-card" style="border-left:4px solid #A96C20">
+    <div class="stat-label">外部依存タスク</div>
+    <div class="stat-value" style="color:#815116">${extCnt}</div>
+  </div>`;
+  row.innerHTML = h;
+})();
+
+/* ===== WBS ===== */
+(function(){
+  function respCls(type){ return {self:'r-self',other:'r-other',wait:'r-ext',external:'r-ext',milestone:'r-mile'}[type]||'r-other'; }
+  let h = '';
+  PH.forEach(ph => {
+    const tasks = TASKS.filter(t=>t.p===ph.id);
+    const bid = `wbs${ph.id}`;
+    h += `<div class="wbs-block">
+      <div class="wbs-head" style="background:${ph.color}" onclick="toggleWbs('${bid}',this)">
+        <span class="ph-badge">${ph.lbl}</span>
+        <span>${ph.name}</span>
+        <span class="cnt">${tasks.length}タスク</span>
+        <span class="arr">▾</span>
+      </div>
+      <div class="wbs-body" id="${bid}">`;
+    tasks.forEach(t => {
+      const isMile = t.type==='milestone';
+      h += `<div class="wbs-row">
+        <span class="wbs-icon">${isMile?'◆':'▸'}</span>
+        <span class="wbs-name">${t.name}</span>
+        <span class="wbs-resp ${respCls(t.type)}">${t.resp}</span>
+      </div>`;
+    });
+    h += `</div></div>`;
+  });
+  document.getElementById('wbs').innerHTML = h;
+})();
+
+function toggleWbs(id, el){
+  const b = document.getElementById(id);
+  const hidden = b.style.display === 'none';
+  b.style.display = hidden ? '' : 'none';
+  el.classList.toggle('closed', !hidden);
+}
+
+/* ===== GANTT ===== */
+(function(){
+  const gt = document.getElementById('gt');
+
+  function cell(w, content){
+    const c = `${w===CUR?' cur':''}${MEND.has(w)?' mend':''}`;
+    return `<td class="gc${c}">${content}</td>`;
+  }
+  function phCell(w, color){
+    const br = MEND.has(w) ? 'border-right:2px solid rgba(255,255,255,.25);' : 'border-right:1px solid rgba(255,255,255,.1);';
+    return `<td style="background:${color};${br}height:26px;"></td>`;
+  }
+
+  let h = '<thead>';
+
+  // Row 1: months
+  h += '<tr class="row-month">';
+  h += `<th class="gn" rowspan="2" style="text-align:left;">タスク名</th>`;
+  h += `<th class="gr" rowspan="2" style="border-right:2px solid #E5E7EB;">担当</th>`;
+  MONTHS.forEach((m, mi) => {
+    const last = mi===MONTHS.length-1;
+    h += `<th colspan="4" style="${last?'':'border-right:2px solid #CBD5E1;'}">${m}</th>`;
+  });
+  h += '</tr>';
+
+  // Row 2: weeks
+  h += '<tr class="row-week">';
+  for(let w=1;w<=WMAX;w++){
+    const wn = ((w-1)%4)+1;
+    const isCur = w===CUR;
+    const me = MEND.has(w);
+    h += `<th class="${isCur?'cur':''}${me?' mend':''}" style="${me?'border-right:2px solid #CBD5E1;':''}">W${wn}${isCur?'<br><span style="font-size:9px;color:#4A4A4A">▼</span>':''}</th>`;
+  }
+  h += '</tr></thead><tbody>';
+
+  let curPh = -1;
+  TASKS.forEach(t => {
+    if(t.p !== curPh){
+      curPh = t.p;
+      const ph = PH[t.p];
+      h += `<tr class="row-ph">
+        <td class="gn" style="background:${ph.color};border-right:1px solid rgba(255,255,255,.2);">${ph.lbl}　${ph.name}</td>
+        <td class="gr" style="background:${ph.color};border-right:2px solid rgba(255,255,255,.2);"></td>
+        ${Array.from({length:WMAX},(_,i)=>phCell(i+1,ph.color)).join('')}
+      </tr>`;
+    }
+
+    const ph = PH[t.p];
+    h += `<tr class="row-task">
+      <td class="gn gn-cell">${t.name}</td>
+      <td class="gr gr-cell">${t.resp}</td>`;
+
+    for(let w=1;w<=WMAX;w++){
+      const active = w>=t.s && w<=t.e;
+      if(!active){ h += cell(w,''); continue; }
+
+      // Milestone
+      if(t.type==='milestone'){
+        h += cell(w, `<div class="mile-cell" style="color:${ph.color}">◆</div>`);
+        continue;
+      }
+
+      const isS = w===t.s, isE = w===t.e;
+      const pos = (isS&&isE)?'bo':(isS?'bs':(isE?'be':''));
+      let cls = `bar ${pos} `;
+      let sty = '';
+
+      if(t.type==='wait'){
+        cls += 'bar-wait';
+      } else if(t.type==='external'){
+        cls += 'bar-ext';
+      } else if(t.type==='other'){
+        cls += 'bar-other';
+        sty = `background-color:${ph.color};opacity:.75;`;
+      } else {
+        cls += 'bar-self';
+        sty = `background:${ph.color};`;
+      }
+
+      h += cell(w, `<div class="${cls.trim()}" style="${sty}"></div>`);
+    }
+
+    h += '</tr>';
+  });
+
+  h += '</tbody>';
+  gt.innerHTML = h;
+})();
+</script>
+</body>
+</html>
