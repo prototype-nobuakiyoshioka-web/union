@@ -36,6 +36,7 @@
     color: var(--c-text);
     font-size: 14px;
     line-height: 1.6;
+    padding-left: 150px;
   }
 
   /* ===== HEADER ===== */
@@ -55,6 +56,53 @@
     padding: 3px 12px;
     font-size: 11px;
     color: #E2E8F0;
+  }
+  .site-nav {
+    position: fixed;
+    z-index: 100;
+    top: 20px;
+    left: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 122px;
+  }
+  .site-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 6px 14px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 7px;
+    color: #475569;
+    background: #fff;
+    border-color: #CBD5E1;
+    box-shadow: var(--shadow);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .site-nav a:hover {
+    color: #1E293B;
+    background: #F8FAFC;
+    border-color: #94A3B8;
+  }
+  .site-nav a[aria-current="page"] {
+    color: #fff;
+    background: #1E293B;
+    border-color: #1E293B;
+  }
+  @media (max-width: 720px) {
+    body { padding-left: 112px; }
+    .site-nav {
+      left: 8px;
+      width: 96px;
+    }
+    .site-nav a {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
   }
 
   /* ===== LAYOUT ===== */
@@ -393,6 +441,262 @@
     border-top: 1px solid var(--c-border);
     margin-top: 8px;
   }
+
+  /* ===== SITE MAP DESIGN SYSTEM ===== */
+  :root {
+    --c-bg: #ececea;
+    --c-surface: #fff;
+    --c-border: #dededb;
+    --c-text: #262626;
+    --c-muted: #757575;
+    --c-ph1: #4a4a4a;
+    --c-ph2: #777;
+    --c-ph3: #969691;
+    --c-ph4: #1b8f64;
+    --c-done: #1b8f64;
+    --c-progress: #4a4a4a;
+    --c-hold: #a96c20;
+    --c-wait: #8c8c88;
+    --radius: 0;
+    --shadow: none;
+  }
+  html { background: var(--c-bg); }
+  body {
+    min-width: 840px;
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .header {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 58px 72px 24px;
+    color: var(--c-text);
+    background: var(--c-surface);
+    border-bottom: 1px solid #e5e5e2;
+  }
+  .header-top {
+    align-items: flex-end;
+    gap: 48px;
+  }
+  .header-eyebrow {
+    margin-bottom: 12px;
+    color: #8c8c88;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .28em;
+  }
+  .header-title {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    line-height: 1.35;
+  }
+  .header-subtitle {
+    margin-top: 10px;
+    color: var(--c-muted);
+    font-size: 12px;
+    letter-spacing: .04em;
+  }
+  .header-meta {
+    max-width: 400px;
+    justify-content: flex-end;
+  }
+  .header-badge {
+    padding: 4px 10px;
+    color: #686864;
+    background: #fafaf8;
+    border: 1px solid var(--c-border);
+    border-radius: 0;
+    letter-spacing: .03em;
+  }
+  .site-nav a {
+    color: #686864;
+    background: #fff;
+    border: 1px solid #deded9;
+    border-radius: 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+    font-size: 11px;
+    letter-spacing: .06em;
+  }
+  .site-nav a:hover {
+    color: #262626;
+    background: #f1f1ee;
+    border-color: #bdbdb8;
+  }
+  .site-nav a[aria-current="page"] {
+    color: #fff;
+    background: #4a4a4a;
+    border-color: #4a4a4a;
+  }
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 38px 72px 64px;
+    background: var(--c-surface);
+  }
+  .section { margin-bottom: 36px; }
+  .section-title {
+    margin-bottom: 14px;
+    color: #686864;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+  }
+  .section-title::after { background: #e5e5e2; }
+  .card,
+  .ov-card,
+  .phase-row,
+  .tech-item,
+  .dep-box,
+  .consult-box,
+  .consult-item,
+  .pending-item {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .overview-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: 38px;
+    border-top: 1px solid var(--c-border);
+    border-left: 1px solid var(--c-border);
+  }
+  .ov-card {
+    min-height: 92px;
+    padding: 18px 20px;
+    border: 0;
+    border-right: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .ov-label {
+    margin-bottom: 8px;
+    color: #8c8c88;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .ov-value {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .03em;
+  }
+  .phase-row {
+    margin-bottom: 8px;
+    border-color: var(--c-border);
+  }
+  .phase-accent { width: 4px; }
+  .phase-body { padding: 16px 20px; }
+  .phase-num {
+    width: 42px;
+    color: #8c8c88;
+    font-size: 10px;
+    letter-spacing: .08em;
+  }
+  .phase-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .05em;
+  }
+  .badge {
+    border-radius: 0;
+    padding: 3px 8px;
+    font-size: 9px;
+    letter-spacing: .05em;
+  }
+  .badge-progress { color: #fff; background: #4a4a4a; }
+  .badge-hold { color: #815116; background: #f5e8d7; }
+  .badge-wait { color: #666; background: #eeeeeb; }
+  .badge-block { color: #815116; background: #f5e8d7; }
+  .card { padding: 22px; }
+  .gantt th {
+    padding: 9px 5px;
+    color: #777;
+    background: #f8f8f6;
+    letter-spacing: .06em;
+  }
+  .gantt th.now {
+    color: #353535;
+    background: #eeeeeb;
+  }
+  .gantt td {
+    padding: 7px 3px;
+    border-bottom-color: #eeeeeb;
+  }
+  .gantt-bar { border-radius: 0; }
+  .gantt-bar.ph1 { background: #4a4a4a; }
+  .gantt-bar.ph2 { background: #777; }
+  .gantt-bar.ph3 { background: #969691; }
+  .gantt-bar.ph4 { background: var(--accent, #1b8f64); }
+  .now-line { border-left-color: #4a4a4a; }
+  .dot-now { background: #4a4a4a; }
+  .dep-bar {
+    color: #815116;
+    background: #f5e8d7;
+    border-color: #d6b98f;
+    border-radius: 0;
+  }
+  .tech-grid { gap: 0; border-top: 1px solid var(--c-border); border-left: 1px solid var(--c-border); }
+  .tech-item {
+    min-height: 54px;
+    border: 0;
+    border-right: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .tech-icon {
+    min-width: 32px;
+    color: #8c8c88;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .1em;
+  }
+  .pending-item {
+    margin-bottom: 4px;
+    background: #fafaf8 !important;
+    border-color: var(--c-border) !important;
+  }
+  .pending-num,
+  .consult-n {
+    border-radius: 0;
+    color: #fff !important;
+    background: #777 !important;
+  }
+  .dep-box {
+    color: #444;
+    background: #fafaf8;
+    border: 1px solid var(--c-border);
+  }
+  .dep-box-title { color: #685030; }
+  .dep-row { border-bottom-color: var(--c-border); }
+  .dep-phase { border-radius: 0; background: #777; }
+  .consult-box {
+    background: #f4f4f2;
+    border: 1px solid var(--c-border);
+  }
+  .consult-title { color: #444; }
+  .consult-item {
+    background: #fff;
+    border-color: var(--c-border);
+  }
+  .consult-tag {
+    border-radius: 0;
+    color: #815116;
+    background: #f5e8d7;
+  }
+  .consult-tag.info {
+    color: #555;
+    background: #e8e8e4;
+  }
+  .footer {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 24px 72px 36px;
+    background: #fff;
+    border-top-color: #e5e5e2;
+    letter-spacing: .03em;
+  }
 </style>
 </head>
 <body>
@@ -401,15 +705,20 @@
 <div class="header">
   <div class="header-top">
     <div>
-      <div class="header-title">🛒 UNION採用サイト｜プロジェクト現状整理・スケジュール</div>
+      <div class="header-eyebrow">UNION RECRUITMENT</div>
+      <div class="header-title">PROJECT SCHEDULE</div>
       <div class="header-subtitle">株式会社野嵩商会（フレッシュプラザUNION）新規採用サイト構築</div>
     </div>
     <div class="header-meta">
-      <span class="header-badge">📅 2026年6月8日 現在</span>
-      <span class="header-badge">🎯 スコープ：サイト設計・実装・公開</span>
+      <span class="header-badge">2026年6月8日 現在</span>
+      <span class="header-badge">スコープ：サイト設計・実装・公開</span>
       <span class="header-badge">対象：上長確認用</span>
     </div>
   </div>
+  <nav class="site-nav" aria-label="資料ページ">
+    <a href="index.html" aria-current="page">スケジュール</a>
+    <a href="union_recruit_sitemap.html">サイトマップ</a>
+  </nav>
 </div>
 
 <div class="container">
@@ -444,7 +753,7 @@
 
   <!-- ===== フェーズ一覧 ===== -->
   <div class="section">
-    <div class="section-title">📌 フェーズ別ステータス</div>
+    <div class="section-title">フェーズ別ステータス</div>
 
     <div class="phase-row">
       <div class="phase-accent" style="background:var(--c-ph1);"></div>
@@ -467,7 +776,7 @@
         <div class="phase-period">2026年8月</div>
         <div class="phase-tags">
           <span class="badge badge-hold">保留</span>
-          <span class="badge badge-block">⚠ 素材支給待ち</span>
+          <span class="badge badge-block">素材支給待ち</span>
         </div>
       </div>
     </div>
@@ -480,7 +789,7 @@
         <div class="phase-period">2026年8月〜9月</div>
         <div class="phase-tags">
           <span class="badge badge-wait">未着手</span>
-          <span class="badge badge-block">⚠ 素材・デザイン確定待ち</span>
+          <span class="badge badge-block">素材・デザイン確定待ち</span>
         </div>
       </div>
     </div>
@@ -500,7 +809,7 @@
 
   <!-- ===== ガントチャート ===== -->
   <div class="section">
-    <div class="section-title">📅 スケジュール（ガントチャート）</div>
+    <div class="section-title">スケジュール（ガントチャート）</div>
     <div class="card">
       <div class="gantt-wrap">
         <table class="gantt">
@@ -532,13 +841,13 @@
               <td class="now-line"></td>
               <td></td>
               <td>
-                <div class="dep-bar">⚠ 素材支給待ち</div>
+                <div class="dep-bar">素材支給待ち</div>
               </td>
               <td></td><td></td>
             </tr>
             <!-- 素材支給ライン -->
             <tr>
-              <td class="phase-label" style="color:#DC2626; font-size:11px;">🔴 素材支給（外部依存）</td>
+              <td class="phase-label" style="color:#815116; font-size:11px;">素材支給（外部依存）</td>
               <td class="now-line"></td>
               <td></td>
               <td style="text-align:center; vertical-align:middle;">
@@ -580,45 +889,45 @@
 
   <!-- ===== 技術進捗 ===== -->
   <div class="section">
-    <div class="section-title">⚙️ 技術環境・実装進捗</div>
+    <div class="section-title">技術環境・実装進捗</div>
     <div class="tech-grid">
       <div class="tech-item">
-        <span class="tech-icon">✅</span>
+        <span class="tech-icon">DONE</span>
         <span class="tech-label">ローカル開発環境（Local）</span>
         <span class="tech-status ts-done">構築済み</span>
       </div>
       <div class="tech-item">
-        <span class="tech-icon">✅</span>
+        <span class="tech-icon">DONE</span>
         <span class="tech-label">WordPressテーマ スケルトン</span>
         <span class="tech-status ts-done">作成済み</span>
       </div>
       <div class="tech-item">
-        <span class="tech-icon">✅</span>
+        <span class="tech-icon">DONE</span>
         <span class="tech-label">テーマ有効化</span>
         <span class="tech-status ts-done">確認済み</span>
       </div>
       <div class="tech-item">
-        <span class="tech-icon">⏳</span>
+        <span class="tech-icon">WAIT</span>
         <span class="tech-label">ACFフィールド設計</span>
         <span class="tech-status ts-wait">デザイン確定後</span>
       </div>
       <div class="tech-item">
-        <span class="tech-icon">⏳</span>
+        <span class="tech-icon">WAIT</span>
         <span class="tech-label">全ページ実装</span>
         <span class="tech-status ts-wait">Ph.3 以降</span>
       </div>
       <div class="tech-item">
-        <span class="tech-icon">⏳</span>
+        <span class="tech-icon">WAIT</span>
         <span class="tech-label">ロリポップ本番デプロイ</span>
         <span class="tech-status ts-wait">Ph.4</span>
       </div>
       <div class="tech-item">
-        <span class="tech-icon">⏳</span>
+        <span class="tech-icon">WAIT</span>
         <span class="tech-label">ドメイン取得</span>
         <span class="tech-status ts-wait">公開直前（保留⑦）</span>
       </div>
       <div class="tech-item">
-        <span class="tech-icon">⏳</span>
+        <span class="tech-icon">WAIT</span>
         <span class="tech-label">LINE CV連携</span>
         <span class="tech-status ts-wait">実装フェーズ</span>
       </div>
@@ -628,7 +937,7 @@
   <!-- ===== 外部依存条件 ===== -->
   <div class="section">
     <div class="dep-box">
-      <div class="dep-box-title">🔴 外部依存条件｜素材支給（上長管轄）</div>
+      <div class="dep-box-title">外部依存条件｜素材支給（上長管轄）</div>
       <div class="dep-row">
         <span class="dep-phase dep-ph2">Ph.2</span>
         <div>
@@ -648,12 +957,12 @@
 
   <!-- ===== 保留事項 ===== -->
   <div class="section">
-    <div class="section-title">⏸️ 保留事項一覧</div>
+    <div class="section-title">保留事項一覧</div>
     <div class="card">
 
       <div class="pending-group">
         <div class="pending-group-title">
-          <span style="color:#991B1B;">🔴</span> クライアント（ミヤハラ様）確認待ち
+          クライアント（ミヤハラ様）確認待ち
         </div>
         <div class="pending-item red">
           <span class="pending-num">③</span>
@@ -687,7 +996,7 @@
 
       <div class="pending-group">
         <div class="pending-group-title">
-          <span style="color:#92400E;">🟡</span> 関係者合意待ち
+          関係者合意待ち
         </div>
         <div class="pending-item yellow">
           <span class="pending-num">①</span>
@@ -707,7 +1016,7 @@
 
       <div class="pending-group">
         <div class="pending-group-title">
-          <span style="color:#065F46;">🟢</span> 公開直前まで保留でOK
+          公開直前まで保留でOK
         </div>
         <div class="pending-item green">
           <span class="pending-num">⑦</span>
@@ -724,7 +1033,7 @@
   <!-- ===== 上長への相談事項 ===== -->
   <div class="section">
     <div class="consult-box">
-      <div class="consult-title">💬 上長への相談事項</div>
+      <div class="consult-title">上長への相談事項</div>
 
       <div class="consult-item">
         <span class="consult-n">1</span>

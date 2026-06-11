@@ -29,6 +29,7 @@
     body {
       min-width: 1180px;
       margin: 0;
+      padding-left: 150px;
       color: var(--ink);
       background: var(--paper);
       font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, sans-serif;
@@ -43,6 +44,46 @@
       background:
         linear-gradient(90deg, #f8f8f6 0, #f8f8f6 1px, transparent 1px) 0 0 / 100% 100%,
         var(--paper);
+    }
+
+    .site-nav {
+      position: fixed;
+      z-index: 100;
+      top: 20px;
+      left: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 122px;
+      margin: 0;
+    }
+
+    .site-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 14px;
+      color: #686864;
+      background: #fff;
+      border: 1px solid #deded9;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-decoration: none;
+      transition: color .2s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .site-nav a:hover {
+      color: #262626;
+      background: #f1f1ee;
+      border-color: #bdbdb8;
+    }
+
+    .site-nav a[aria-current="page"] {
+      color: #fff;
+      background: #4a4a4a;
+      border-color: #4a4a4a;
     }
 
     .page-header {
@@ -369,6 +410,11 @@
 </head>
 <body>
   <main class="page">
+    <nav class="site-nav" aria-label="資料ページ">
+      <a href="index.html">スケジュール</a>
+      <a href="union_recruit_sitemap.html" aria-current="page">サイトマップ</a>
+    </nav>
+
     <header class="page-header">
       <div>
         <p class="eyebrow">UNION RECRUITMENT</p>
