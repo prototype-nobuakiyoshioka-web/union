@@ -10,12 +10,11 @@
       --muted: #757575;
       --line: #9a9a9a;
       --node: #4a4a4a;
-      --node-sub: #777;
       --node-detail: #f4f4f2;
       --border: #dededb;
       --paper: #fff;
       --accent: #1b8f64;
-      --pending: #a96c20;
+      --cms: #146b4e;
     }
 
     * {
@@ -29,7 +28,6 @@
     body {
       min-width: 1180px;
       margin: 0;
-      padding-left: 150px;
       color: var(--ink);
       background: var(--paper);
       font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, sans-serif;
@@ -46,45 +44,62 @@
         var(--paper);
     }
 
-    .site-nav {
-      position: fixed;
-      z-index: 100;
-      top: 20px;
-      left: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      width: 122px;
-      margin: 0;
+    /* page nav */
+    .page-nav {
+      position: fixed; bottom: 14px; left: 14px; z-index: 9990;
+      display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 8px; width: 128px;
+      pointer-events: none;
     }
-
-    .site-nav a {
-      display: inline-flex;
-      align-items: center;
-      min-height: 34px;
-      padding: 6px 14px;
-      color: #686864;
-      background: #fff;
+    .page-nav-checkbox {
+      position: absolute; width: 1px; height: 1px;
+      opacity: 0; pointer-events: none;
+    }
+    .page-nav-toggle {
+      position: relative;
+      display: block; width: 38px; height: 38px;
+      background: #3a3a3a;
+      border: 1px solid #3a3a3a;
+      box-shadow: 0 2px 8px rgba(0,0,0,.16);
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .page-nav-toggle::before,
+    .page-nav-toggle::after {
+      content: "";
+      position: absolute; left: 11px; right: 11px;
+      height: 2px; background: #fff;
+      transition: transform .15s, top .15s;
+    }
+    .page-nav-toggle::before { top: 14px; }
+    .page-nav-toggle::after { top: 22px; }
+    .page-nav-checkbox:checked + .page-nav-toggle::before {
+      top: 18px; transform: rotate(45deg);
+    }
+    .page-nav-checkbox:checked + .page-nav-toggle::after {
+      top: 18px; transform: rotate(-45deg);
+    }
+    .page-nav-links {
+      display: flex; flex-direction: column; gap: 6px; width: 128px;
+      opacity: 0; transform: translateY(6px);
+      pointer-events: none;
+      transition: opacity .15s, transform .15s;
+    }
+    .page-nav-checkbox:checked ~ .page-nav-links {
+      opacity: 1; transform: translateY(0);
+      pointer-events: auto;
+    }
+    .page-nav a {
+      display: flex; align-items: center; min-height: 36px;
+      padding: 8px 14px;
+      color: #5a5a58; background: #fff;
       border: 1px solid #deded9;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .06em;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+      font-size: 11px; font-weight: 600; letter-spacing: .05em;
       text-decoration: none;
-      transition: color .2s ease, background .2s ease, border-color .2s ease;
+      transition: background .15s, color .15s, border-color .15s;
     }
-
-    .site-nav a:hover {
-      color: #262626;
-      background: #f1f1ee;
-      border-color: #bdbdb8;
-    }
-
-    .site-nav a[aria-current="page"] {
-      color: #fff;
-      background: #4a4a4a;
-      border-color: #4a4a4a;
-    }
+    .page-nav a:hover { color: #111; background: #f2f2ef; border-color: #b8b8b4; }
+    .page-nav a.current { color: #fff; background: #3a3a3a; border-color: #3a3a3a; }
 
     .page-header {
       display: flex;
@@ -114,7 +129,7 @@
     }
 
     .header-copy {
-      width: 460px;
+      width: 480px;
       margin: 0;
       color: var(--muted);
       font-size: 13px;
@@ -124,14 +139,14 @@
     .sitemap {
       position: relative;
       width: 1160px;
-      height: 612px;
+      height: 930px;
       margin: 0 auto;
     }
 
     .site-name {
       position: absolute;
       left: 0;
-      top: 34px;
+      top: 28px;
     }
 
     .site-name strong {
@@ -165,14 +180,14 @@
 
     .line-root {
       left: 280px;
-      top: 274px;
+      top: 138px;
       width: 110px;
     }
 
     .line-trunk {
       left: 390px;
-      top: 103px;
-      height: 342px;
+      top: 138px;
+      height: 618px;
     }
 
     .line-main {
@@ -180,19 +195,22 @@
       width: 70px;
     }
 
-    .line-company { top: 103px; }
-    .line-department { top: 217px; }
-    .line-people { top: 331px; }
-    .line-news { top: 445px; }
+    .line-about { top: 220px; }
+    .line-department { top: 354px; }
+    .line-interview { top: 488px; }
+    .line-work { top: 622px; }
+    .line-entry { top: 756px; }
 
     .branch-line {
       left: 748px;
       width: 62px;
     }
 
-    .branch-department { top: 217px; }
-    .branch-people { top: 331px; }
-    .branch-news { top: 445px; }
+    .branch-top { top: 138px; }
+    .branch-department { top: 354px; }
+    .branch-interview { top: 488px; }
+    .branch-work { top: 622px; }
+    .branch-entry { top: 756px; }
 
     .node {
       position: absolute;
@@ -233,7 +251,7 @@
 
     .node-root {
       left: 10px;
-      top: 222px;
+      top: 86px;
       width: 270px;
       min-height: 104px;
       padding-left: 42px;
@@ -248,15 +266,14 @@
     .node-main {
       left: 460px;
       width: 288px;
+      min-height: 104px;
     }
 
-    .node-company {
-      top: 45px;
-      height: 116px;
-    }
-    .node-department { top: 173px; }
-    .node-people { top: 287px; }
-    .node-news { top: 401px; }
+    .node-about { top: 168px; }
+    .node-department { top: 302px; }
+    .node-interview { top: 436px; }
+    .node-work { top: 570px; }
+    .node-entry { top: 704px; }
 
     .node-detail {
       left: 810px;
@@ -279,10 +296,23 @@
       letter-spacing: .08em;
     }
 
+    .node-detail .node-description {
+      color: #777;
+    }
+
+    .detail-top {
+      top: 90px;
+      min-height: 96px;
+    }
+
+    .detail-interview { top: 450px; }
+    .detail-work { top: 584px; }
+    .detail-entry { top: 718px; }
+
     .department-details {
       position: absolute;
       left: 810px;
-      top: 172px;
+      top: 302px;
       z-index: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -303,9 +333,6 @@
       letter-spacing: .06em;
     }
 
-    .detail-people { top: 294px; }
-    .detail-news { top: 408px; }
-
     .badge {
       display: inline-flex;
       align-items: center;
@@ -320,25 +347,20 @@
     }
 
     .badge-cms {
-      color: #146b4e;
+      color: var(--cms);
       background: #ddf3e9;
-    }
-
-    .badge-pending {
-      color: #815116;
-      background: #f5e8d7;
     }
 
     .common-area {
       position: absolute;
       left: 10px;
-      top: 530px;
+      top: 860px;
       display: grid;
       grid-template-columns: 160px 1fr auto;
       align-items: center;
       gap: 24px;
       width: 1130px;
-      min-height: 68px;
+      min-height: 56px;
       padding: 13px 22px;
       background: #fafaf8;
       border: 1px solid #deded9;
@@ -410,10 +432,13 @@
 </head>
 <body>
   <main class="page">
-    <nav class="site-nav" aria-label="資料ページ">
-      <a href="index.html">スケジュール</a>
-      <a href="union_recruit_sitemap.html" aria-current="page">サイトマップ</a>
-      <a href="union_wbs_gantt.html">WBS・ガント</a>
+    <nav class="page-nav">
+      <input class="page-nav-checkbox" type="checkbox" id="page-nav-toggle">
+      <label class="page-nav-toggle" for="page-nav-toggle"></label>
+      <div class="page-nav-links">
+        <a href="union_top_wireframe.html">TOP WF</a>
+        <a href="union_recruit_sitemap.html" class="current">サイトマップ</a>
+      </div>
     </nav>
 
     <header class="page-header">
@@ -422,8 +447,8 @@
         <h1>SITE MAP</h1>
       </div>
       <p class="header-copy">
-        採用サイトのページ構成と更新範囲を示したサイトマップです。
-        主要ページ、下層ページ、共通の問い合わせ導線を分類しています。
+        採用サイトのリニューアル後のページ構成です。
+        「スーパーを超えていこう」の世界観を軸に、各コンテンツとLINE応募導線を整理しています。
       </p>
     </header>
 
@@ -435,72 +460,90 @@
 
       <div class="connector horizontal line-root"></div>
       <div class="connector vertical line-trunk"></div>
-      <div class="connector horizontal line-main line-company"></div>
+      <div class="connector horizontal line-main line-about"></div>
       <div class="connector horizontal line-main line-department"></div>
-      <div class="connector horizontal line-main line-people"></div>
-      <div class="connector horizontal line-main line-news"></div>
+      <div class="connector horizontal line-main line-interview"></div>
+      <div class="connector horizontal line-main line-work"></div>
+      <div class="connector horizontal line-main line-entry"></div>
+      <div class="connector horizontal branch-line branch-top"></div>
       <div class="connector horizontal branch-line branch-department"></div>
-      <div class="connector horizontal branch-line branch-people"></div>
-      <div class="connector horizontal branch-line branch-news"></div>
+      <div class="connector horizontal branch-line branch-interview"></div>
+      <div class="connector horizontal branch-line branch-work"></div>
+      <div class="connector horizontal branch-line branch-entry"></div>
 
       <article class="node node-root">
         <p class="node-kicker">Starting point</p>
         <h2 class="node-title">TOP</h2>
-        <p class="node-description">動画KV・会社の想い・従業員の声</p>
+        <p class="node-description">採用サイトの起点・各ページへの誘導</p>
       </article>
 
-      <article class="node node-main node-company">
+      <article class="node node-detail detail-top">
+        <p class="node-kicker">Contents</p>
+        <h3 class="node-title">KV／会社メッセージ／部署紹介（動画×4）／職場・仕事紹介（動画×1）／LINE CTA／お知らせ／フッター</h3>
+        <p class="node-description">KVはOPアニメーション＋静止画＋コピー（動画なし）。</p>
+      </article>
+
+      <article class="node node-main node-about">
         <p class="node-kicker">About us</p>
-        <h2 class="node-title">会社について</h2>
-        <p class="node-description">
-          会社説明・想い・仕事内容・給与／キャリア
-          <span class="badge badge-pending">確認待ち</span>
-        </p>
+        <h2 class="node-title">UNIONって何者？</h2>
+        <p class="node-description">「スーパーじゃない」を語る世界観・想いのテキストコンテンツ</p>
       </article>
 
       <article class="node node-main node-department">
         <p class="node-kicker">Department</p>
         <h2 class="node-title">部署紹介</h2>
-        <p class="node-description">各部署の紹介動画・仕事内容</p>
+        <p class="node-description">4部署掲載。各部署に動画＋説明テキストを配置。</p>
       </article>
 
-      <div class="department-details" aria-label="部署紹介の下層ページ">
-        <div class="detail-chip">バイヤー</div>
-        <div class="detail-chip">店舗管理部</div>
-        <div class="detail-chip">広報部</div>
-        <div class="detail-chip">人事部</div>
+      <div class="department-details" aria-label="部署紹介の掲載内容">
+        <div class="detail-chip">部署 1</div>
+        <div class="detail-chip">部署 2</div>
+        <div class="detail-chip">部署 3</div>
+        <div class="detail-chip">部署 4</div>
+        <div class="detail-chip">新規撮影動画</div>
       </div>
 
-      <article class="node node-main node-people">
-        <p class="node-kicker">People</p>
-        <h2 class="node-title">人（PEOPLE）</h2>
-        <p class="node-description">
-          従業員インタビュー
-          <span class="badge badge-cms">CMS</span>
-        </p>
+      <article class="node node-main node-interview">
+        <p class="node-kicker">Interview</p>
+        <h2 class="node-title">社員インタビュー <span class="badge badge-cms">CMS</span></h2>
+        <p class="node-description">初期4件。写真＋QA形式で構成。</p>
       </article>
 
-      <article class="node node-detail detail-people">
-        <p class="node-kicker">Detail page</p>
-        <h3 class="node-title">インタビュー詳細</h3>
+      <article class="node node-detail detail-interview">
+        <p class="node-kicker">WordPress</p>
+        <h3 class="node-title">カスタム投稿タイプで管理</h3>
+        <p class="node-description">ストーリー形式になる可能性あり。</p>
       </article>
 
-      <article class="node node-main node-news">
-        <p class="node-kicker">News</p>
-        <h2 class="node-title">お知らせ <span class="badge badge-cms">CMS</span></h2>
-        <p class="node-description">採用情報・イベント情報など</p>
+      <article class="node node-main node-work">
+        <p class="node-kicker">Workplace</p>
+        <h2 class="node-title">職場・仕事紹介</h2>
+        <p class="node-description">働く環境と仕事内容を具体的に見せるページ。</p>
       </article>
 
-      <article class="node node-detail detail-news">
-        <p class="node-kicker">Detail page</p>
-        <h3 class="node-title">記事詳細</h3>
+      <article class="node node-detail detail-work">
+        <p class="node-kicker">Contents</p>
+        <h3 class="node-title">1日のタイムライン／職場写真／待遇一覧</h3>
+        <p class="node-description">ボーナス年3回などの待遇情報も掲載。</p>
+      </article>
+
+      <article class="node node-main node-entry">
+        <p class="node-kicker">Entry</p>
+        <h2 class="node-title">エントリー</h2>
+        <p class="node-description">LINEへの誘導のみで応募導線を集約。</p>
+      </article>
+
+      <article class="node node-detail detail-entry">
+        <p class="node-kicker">Primary CV</p>
+        <h3 class="node-title">LINE CTA</h3>
+        <p class="node-description">説明会参加・採用に関する問い合わせへ誘導。</p>
       </article>
 
       <aside class="common-area" aria-label="全ページ共通機能">
         <div class="common-label">Common function</div>
         <div>
-          <p class="common-title">LINE 問い合わせ</p>
-          <p class="common-copy">説明会参加・採用に関する問い合わせへ誘導する全ページ共通ボタン</p>
+          <p class="common-title">LINE CTA・フッター</p>
+          <p class="common-copy">応募・問い合わせ導線はLINEへ集約。TOPにはお知らせも掲載します。</p>
         </div>
         <div class="primary-cv">PRIMARY CV</div>
       </aside>
@@ -509,16 +552,16 @@
     <footer class="notes" aria-label="サイトマップの注記">
       <p class="notes-heading">NOTES</p>
       <p class="note">
+        <strong>世界観</strong>
+        「スーパーを超えていこう」を軸に、会社メッセージと各ページの誘導を整理します。
+      </p>
+      <p class="note">
         <strong>CMS</strong>
-        クライアントが管理画面から記事の追加・編集を行うページです。
+        社員インタビューはWordPressのカスタム投稿タイプで管理します。
       </p>
       <p class="note">
-        <strong>確認待ち</strong>
-        仕事内容・給与・キャリア情報の配置はクライアント確認後に確定します。
-      </p>
-      <p class="note">
-        <strong>ページ方針</strong>
-        募集要項ページは設けず、LINE問い合わせを主な応募導線として使用します。
+        <strong>撮影</strong>
+        部署紹介（×4）と職場・仕事紹介（×1）の動画は新規撮影を前提とします。KVはOPアニメーション＋静止画。
       </p>
     </footer>
   </main>

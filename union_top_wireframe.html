@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPページ ワイヤーフレーム｜UNION採用サイト</title>
+<style>
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; background: #e8e8e8; color: #333; }
+
+/* ===== TOGGLE BAR ===== */
+#toggle-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+  background: #1a1a1a; padding: 0 16px;
+  display: flex; align-items: center; gap: 12px; height: 40px;
+  border-bottom: 1px solid #333;
+}
+#toggle-bar .vl { color: #444; }
+#toggle-bar .label { color: #555; font-size: 10px; margin-left: auto; letter-spacing: .08em; }
+.tbtn {
+  padding: 3px 12px; border: 1px solid #444; border-radius: 3px;
+  background: transparent; color: #888; font-size: 11px; cursor: pointer;
+}
+.tbtn.active { background: #fff; color: #1a1a1a; border-color: #fff; font-weight: 700; }
+
+/* ===== CANVAS ===== */
+#wrap { padding-top: 40px; display: flex; justify-content: center; min-height: 100vh; }
+.canvas { background: #fff; width: 390px; }
+body.pc .canvas { width: 1280px; }
+
+/* ===== SECTION ===== */
+.sec { border-bottom: 2px dashed #d0d0d0; }
+.sec-head {
+  background: #f0f0f0; border-bottom: 1px solid #ddd;
+  padding: 6px 16px; display: flex; align-items: center; gap: 10px;
+}
+.sec-num { font-size: 10px; font-weight: 700; color: #999; letter-spacing: .1em; min-width: 24px; }
+.sec-name { font-size: 11px; font-weight: 700; color: #555; letter-spacing: .05em; }
+.sec-body { padding: 20px 16px; }
+body.pc .sec-body { padding: 32px 60px; }
+
+/* ===== WF ELEMENTS ===== */
+/* X-image box */
+.b-img {
+  background-color: #e4e4e4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cline x1='0' y1='0' x2='100%25' y2='100%25' stroke='%23c0c0c0' stroke-width='1.5'/%3E%3Cline x1='100%25' y1='0' x2='0' y2='100%25' stroke='%23c0c0c0' stroke-width='1.5'/%3E%3C/svg%3E");
+  border: 1px solid #ccc;
+  display: flex; align-items: center; justify-content: center;
+  color: #999; font-size: 12px; font-weight: 500;
+}
+/* video box */
+.b-video {
+  background: #d4d4d4; border: 1px solid #bbb;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; color: #777; font-size: 12px;
+}
+.b-video-icon {
+  width: 44px; height: 44px; border: 2px solid #999; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.b-video-icon::after { content: '▶'; font-size: 14px; color: #999; margin-left: 3px; }
+
+/* text stubs */
+.tl   { height: 10px; background: #ddd; border-radius: 2px; margin-bottom: 7px; }
+.tl-m { height: 16px; background: #ccc; border-radius: 2px; margin-bottom: 9px; }
+.tl-l { height: 24px; background: #bbb; border-radius: 2px; margin-bottom: 10px; }
+.tl-xl{ height: 32px; background: #aaa; border-radius: 3px; margin-bottom: 12px; }
+.tl.s50 { width: 50%; } .tl.s60 { width: 60%; } .tl.s70 { width: 70%; } .tl.s80 { width: 80%; }
+.tl-m.s60 { width: 60%; } .tl-m.s40 { width: 40%; }
+.tl-l.s70 { width: 70%; } .tl-l.s50 { width: 50%; }
+
+/* marquee band */
+.marquee-band {
+  overflow: hidden; height: 48px;
+  background: #eee; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+  display: flex; align-items: center;
+  position: relative;
+}
+.marquee-inner {
+  white-space: nowrap; font-size: 20px; font-weight: 900; letter-spacing: .05em;
+  color: #bbb; padding: 0 16px;
+  display: flex; gap: 32px;
+}
+.marquee-band .ann-inline {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: #fff3cd; border: 1px solid #ffc107; color: #856404;
+  font-size: 10px; padding: 2px 6px; border-radius: 3px; white-space: nowrap;
+}
+body.pc .marquee-band { height: 64px; }
+body.pc .marquee-inner { font-size: 30px; }
+
+/* nav */
+.nav-bar {
+  height: 56px; background: #e8e8e8; border-bottom: 1px solid #ccc;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+}
+body.pc .nav-bar { height: 68px; padding: 0 60px; }
+.nav-logo { width: 72px; height: 24px; background: #bbb; border-radius: 2px; }
+.nav-links { display: flex; gap: 20px; }
+.nav-link { width: 56px; height: 9px; background: #ccc; border-radius: 2px; }
+.nav-cta-btn { width: 96px; height: 30px; background: #bbb; border-radius: 2px; }
+body.sp .nav-links, body.sp .nav-cta-btn { display: none; }
+.nav-ham { display: flex; flex-direction: column; justify-content: space-between; width: 24px; height: 16px; }
+.nav-ham span { height: 2px; background: #aaa; border-radius: 1px; display: block; }
+body.pc .nav-ham { display: none; }
+
+/* buttons */
+.btn-line {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: #d0d0d0; border: 2px solid #bbb; border-radius: 3px;
+  padding: 13px 24px; font-size: 13px; font-weight: 700; color: #666;
+}
+.btn-line::before {
+  content: 'LINE'; width: 28px; height: 28px; background: #aaa; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #fff; font-weight: 900; flex-shrink: 0;
+}
+.btn-sm {
+  display: inline-block; background: #ddd; border: 1px solid #ccc;
+  padding: 8px 20px; border-radius: 2px; font-size: 11px; color: #888;
+}
+
+/* annotations */
+.ann {
+  background: #dbeafe; border: 1px solid #93c5fd; color: #1d4ed8;
+  font-size: 11px; line-height: 1.6; padding: 7px 10px; border-radius: 3px;
+  margin-top: 10px;
+}
+.ann.warn {
+  background: #fef3c7; border-color: #fcd34d; color: #92400e;
+}
+.ann.note {
+  background: #f3f4f6; border-color: #d1d5db; color: #4b5563;
+}
+
+/* tags */
+.tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 2px; margin-right: 3px; }
+.tag-cms { background: #dbeafe; color: #1d4ed8; }
+.tag-cv  { background: #dcfce7; color: #166534; }
+.tag-pend{ background: #fef3c7; color: #92400e; }
+
+/* card grid */
+.cards { display: flex; flex-direction: column; gap: 12px; }
+body.pc .cards { flex-direction: row; }
+.card { border: 1px solid #ccc; background: #fafafa; border-radius: 2px; overflow: hidden; flex: 1; }
+.card-img { width: 100%; }
+.card-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.card-arrow { align-self: flex-end; width: 28px; height: 28px; background: #ddd; border-radius: 50%; }
+
+/* news */
+.news-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #eee; align-items: flex-start; }
+.news-date { width: 72px; flex-shrink: 0; }
+.news-body { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+
+/* footer */
+.footer-wrap { background: #d8d8d8; padding: 32px 16px 20px; }
+body.pc .footer-wrap { padding: 48px 60px 24px; }
+.footer-inner { display: flex; flex-direction: column; gap: 20px; }
+body.pc .footer-inner { flex-direction: row; gap: 60px; }
+.footer-col { display: flex; flex-direction: column; gap: 8px; }
+.divider { height: 1px; background: #c8c8c8; margin: 20px 0 12px; }
+
+/* copy area (KV下) */
+.kv-copy {
+  padding: 24px 16px;
+  background: #f8f5f0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+body.pc .kv-copy { padding: 36px 60px; gap: 12px; }
+
+/* LINE CTA section */
+.cta-band {
+  background: #e4e4e4; border: 2px dashed #ccc;
+  padding: 32px 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+body.pc .cta-band { flex-direction: row; justify-content: center; gap: 48px; padding: 48px 60px; }
+
+/* page nav */
+.page-nav {
+  position: fixed; bottom: 14px; left: 14px; z-index: 9990;
+  display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 8px; width: 128px;
+  pointer-events: none;
+}
+.page-nav-checkbox {
+  position: absolute; width: 1px; height: 1px;
+  opacity: 0; pointer-events: none;
+}
+.page-nav-toggle {
+  position: relative;
+  display: block; width: 38px; height: 38px;
+  background: #3a3a3a;
+  border: 1px solid #3a3a3a;
+  box-shadow: 0 2px 8px rgba(0,0,0,.16);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.page-nav-toggle::before,
+.page-nav-toggle::after {
+  content: "";
+  position: absolute; left: 11px; right: 11px;
+  height: 2px; background: #fff;
+  transition: transform .15s, top .15s;
+}
+.page-nav-toggle::before { top: 14px; }
+.page-nav-toggle::after { top: 22px; }
+.page-nav-checkbox:checked + .page-nav-toggle::before {
+  top: 18px; transform: rotate(45deg);
+}
+.page-nav-checkbox:checked + .page-nav-toggle::after {
+  top: 18px; transform: rotate(-45deg);
+}
+.page-nav-links {
+  display: flex; flex-direction: column; gap: 6px; width: 128px;
+  opacity: 0; transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity .15s, transform .15s;
+}
+.page-nav-checkbox:checked ~ .page-nav-links {
+  opacity: 1; transform: translateY(0);
+  pointer-events: auto;
+}
+.page-nav a {
+  display: flex; align-items: center; min-height: 36px;
+  padding: 8px 14px;
+  color: #5a5a58; background: #fff;
+  border: 1px solid #deded9;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07);
+  font-size: 11px; font-weight: 600; letter-spacing: .05em;
+  text-decoration: none;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.page-nav a:hover { color: #111; background: #f2f2ef; border-color: #b8b8b4; }
+.page-nav a.current { color: #fff; background: #3a3a3a; border-color: #3a3a3a; }
+</style>
+</head>
+<body class="sp">
+
+<div id="toggle-bar">
+  <span style="color:#666;font-size:11px;">VIEW</span>
+  <button class="tbtn active" onclick="sv('sp')">SP</button>
+  <button class="tbtn" onclick="sv('pc')">PC</button>
+  <span class="vl">|</span>
+  <span style="color:#666;font-size:11px;">UNION採用サイト / TOP WF v3</span>
+  <span class="label">共有用確認ワイヤーフレーム</span>
+</div>
+
+<div id="wrap">
+<div class="canvas">
+
+  <!-- 00 HEADER -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-num">00</span>
+      <span class="sec-name">HEADER / NAV</span>
+    </div>
+    <nav class="nav-bar">
+      <div class="nav-logo"></div>
+      <div class="nav-links">
+        <div class="nav-link"></div>
+        <div class="nav-link"></div>
+        <div class="nav-link"></div>
+        <div class="nav-link"></div>
+      </div>
+      <div class="nav-cta-btn"></div>
+      <div class="nav-ham"><span></span><span></span><span></span></div>
+    </nav>
+    <div style="padding:8px 12px;">
+      <div class="ann note" style="margin-top:0;">
+        ナビ項目：UNIONって何者？ / 部署紹介 / 社員インタビュー / 職場・仕事紹介 / エントリー（LINE）
+        <br>右端：常設 LINE CTAボタン（全ページ共通）
+      </div>
+    </div>
+  </div>
+
+  <!-- 01 KV -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-name">KV（ファーストビュー）</span>
+    </div>
+
+    <!-- マーキー帯（上） -->
+    <div class="marquee-band">
+      <div class="marquee-inner">MORE UNIQUE,&nbsp;&nbsp;MORE UNION.&nbsp;&nbsp;MORE UNIQUE,&nbsp;&nbsp;MORE UNION.&nbsp;&nbsp;MORE UNIQUE,&nbsp;&nbsp;MORE UNION.</div>
+      <span class="ann-inline">← 無限ループ横スクロール</span>
+    </div>
+
+    <!-- OPアニメーション＋静止画＋コピー -->
+    <div class="kv-copy" style="padding-top:16px;">
+      <div class="ann warn" style="margin-top:0; font-size:10px;">
+        ▼ OPアニメーション再生 → 静止画＋コピーに定着
+      </div>
+
+      <!-- 静止画エリア -->
+      <div class="b-img" style="width:100%; height:220px; margin-top:8px;">静止画ビジュアル</div>
+
+      <div class="ann note" style="font-size:10px; margin-top:6px;">
+        OPアニメーション：ディズニーマーベルのような演出→ユニオンマンのスーパーを超えていこう
+      </div>
+
+      <!-- コピー -->
+      <div style="display:flex; flex-direction:column; gap:6px; padding-top:12px;">
+        <div class="tl-xl" style="width:90%;"></div>
+        <div class="tl-l" style="width:70%;"></div>
+        <div class="tl s50" style="margin-top:2px;"></div>
+      </div>
+
+      <div class="ann" style="font-size:10px; margin-top:8px;">
+        コピー：「MORE UNIQUE, MORE UNION. ─ スーパーを超えていこう。」
+      </div>
+    </div>
+
+    <!-- マーキー帯（下） -->
+    <div class="marquee-band">
+      <div class="marquee-inner">MORE UNIQUE,&nbsp;&nbsp;MORE UNION.&nbsp;&nbsp;MORE UNIQUE,&nbsp;&nbsp;MORE UNION.&nbsp;&nbsp;MORE UNIQUE,&nbsp;&nbsp;MORE UNION.</div>
+    </div>
+  </div>
+
+  <!-- 02 会社メッセージ -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-name">会社メッセージ（UNIONって何者？）</span>
+    </div>
+    <div class="sec-body">
+      <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px;">
+        <div class="tl s50" style="height:9px; background:#ddd;"></div>
+        <div class="tl-xl" style="width:90%;"></div>
+        <div class="tl-l s70"></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:5px; margin-bottom:12px;">
+        <div class="tl"></div><div class="tl s80"></div><div class="tl s60"></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:5px; margin-bottom:12px;">
+        <div class="tl"></div><div class="tl s80"></div><div class="tl s40"></div>
+      </div>
+      <div style="margin-top:8px;">
+        <div class="tl s40" style="background:#bbb;"></div>
+      </div>
+      <div class="ann">
+        「ただのスーパーじゃない」を語るテキストセクション。<br>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 部署紹介 -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-name">部署紹介（動画4つ）</span>
+    </div>
+    <div class="sec-body">
+      <div style="margin-bottom:14px;">
+        <div class="tl s50" style="height:9px; background:#ddd; margin-bottom:6px;"></div>
+        <div class="tl-l s70"></div>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="b-video" style="width:100%; aspect-ratio:16/9;">
+            <div class="b-video-icon"></div>
+            <span style="font-size:11px;">部署紹介 動画①</span>
+          </div>
+          <div class="card-body">
+            <div class="tl-m s80"></div>
+            <div class="tl s70"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="b-video" style="width:100%; aspect-ratio:16/9;">
+            <div class="b-video-icon"></div>
+            <span style="font-size:11px;">部署紹介 動画②</span>
+          </div>
+          <div class="card-body">
+            <div class="tl-m s80"></div>
+            <div class="tl s70"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="b-video" style="width:100%; aspect-ratio:16/9;">
+            <div class="b-video-icon"></div>
+            <span style="font-size:11px;">部署紹介 動画③</span>
+          </div>
+          <div class="card-body">
+            <div class="tl-m s80"></div>
+            <div class="tl s70"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="b-video" style="width:100%; aspect-ratio:16/9;">
+            <div class="b-video-icon"></div>
+            <span style="font-size:11px;">部署紹介 動画④</span>
+          </div>
+          <div class="card-body">
+            <div class="tl-m s80"></div>
+            <div class="tl s70"></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:14px; text-align:right;"><span class="btn-sm">部署紹介ページへ →</span></div>
+      <div class="ann" style="margin-top:10px;">
+        4部署の動画を掲載。各カードに部署名＋説明テキスト。
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 職場・仕事紹介 -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <span class="sec-name">職場・仕事紹介（動画1つ）</span>
+    </div>
+    <div class="sec-body">
+      <div style="margin-bottom:14px;">
+        <div class="tl s50" style="height:9px; background:#ddd; margin-bottom:6px;"></div>
+        <div class="tl-l s70"></div>
+      </div>
+      <div class="b-video" style="width:100%; aspect-ratio:16/9; max-height:240px;">
+        <div class="b-video-icon"></div>
+        <span style="font-size:12px;">職場・仕事紹介 動画</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:5px; margin-top:14px;">
+        <div class="tl"></div><div class="tl s80"></div><div class="tl s60"></div>
+      </div>
+      <div style="margin-top:14px; text-align:right;"><span class="btn-sm">職場・仕事紹介ページへ →</span></div>
+      <div class="ann" style="margin-top:10px;">
+        1日のタイムライン・職場写真・待遇情報は詳細ページへ。TOPでは動画で雰囲気を伝える。
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 LINE CTA -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <span class="sec-name">LINE CTAバナー</span>
+    </div>
+    <div class="sec-body" style="padding-top:16px; padding-bottom:16px;">
+      <div class="cta-band">
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:center;">
+          <div class="tl-l" style="width:180px;"></div>
+          <div class="tl-m" style="width:140px;"></div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+          <div class="btn-line">LINEで話を聞いてみる</div>
+          <span class="tag tag-cv">CV</span>
+        </div>
+      </div>
+      <div class="ann warn" style="margin-top:10px;">
+        <span class="tag tag-pend">保留</span>
+        文言：「気軽に話を聞いてみる」寄り ／ 「説明会に参加する」寄り
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 お知らせ -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <span class="sec-name">お知らせ</span>
+    </div>
+    <div class="sec-body">
+      <div style="margin-bottom:14px;"><div class="tl-l s40"></div></div>
+      <div class="news-row">
+        <div class="news-date"><div class="tl" style="width:64px; margin:0;"></div></div>
+        <div class="news-body"><div class="tl s80"></div><div class="tl s60"></div></div>
+      </div>
+      <div class="news-row">
+        <div class="news-date"><div class="tl" style="width:64px; margin:0;"></div></div>
+        <div class="news-body"><div class="tl s80"></div><div class="tl s50"></div></div>
+      </div>
+      <div class="news-row" style="border-bottom:none;">
+        <div class="news-date"><div class="tl" style="width:64px; margin:0;"></div></div>
+        <div class="news-body"><div class="tl s80"></div><div class="tl s60"></div></div>
+      </div>
+      <div style="margin-top:14px; text-align:right;"><span class="btn-sm">一覧を見る →</span></div>
+      <div class="ann" style="margin-top:10px;">
+        <span class="tag tag-cms">CMS</span> WordPressカスタム投稿で管理。TOP表示は最新3件。
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 フッター -->
+  <div class="sec" style="border-bottom:none;">
+    <div class="sec-head">
+      <span class="sec-num">07</span>
+      <span class="sec-name">フッター</span>
+    </div>
+    <div class="footer-wrap">
+      <div class="footer-inner">
+        <div class="footer-col">
+          <div class="nav-logo" style="width:88px; height:28px;"></div>
+          <div class="tl s60" style="margin:0;"></div>
+          <div class="tl s40" style="margin:0;"></div>
+        </div>
+        <div class="footer-col">
+          <div class="tl-m s60" style="margin:0;"></div>
+          <div class="tl s60" style="margin:0;"></div>
+          <div class="tl s60" style="margin:0;"></div>
+          <div class="tl s60" style="margin:0;"></div>
+          <div class="tl s60" style="margin:0;"></div>
+        </div>
+        <div class="footer-col">
+          <div class="btn-line" style="font-size:12px; padding:10px 16px;">LINEで話を聞いてみる</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="tl s40" style="margin:0;"></div>
+    </div>
+  </div>
+
+</div><!-- /canvas -->
+</div><!-- /wrap -->
+
+<!-- SIDE NAV -->
+<nav class="page-nav">
+  <input class="page-nav-checkbox" type="checkbox" id="page-nav-toggle">
+  <label class="page-nav-toggle" for="page-nav-toggle"></label>
+  <div class="page-nav-links">
+    <a href="union_top_wireframe.html" class="current">TOP WF</a>
+    <a href="union_recruit_sitemap.html">サイトマップ</a>
+  </div>
+</nav>
+
+<script>
+function sv(v) {
+  document.body.className = v;
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.tbtn[onclick="sv(\''+v+'\')"]').classList.add('active');
+}
+</script>
+</body>
+</html>
